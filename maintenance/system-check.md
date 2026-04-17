@@ -30,13 +30,16 @@ Before any production round, test every live dependency the engine uses. Pass/fa
 | `content-pillars.md` exists and has 3+ pillars | [ ] |
 | `cta-templates.md` exists | [ ] |
 | `brand-guidelines.md` exists | [ ] |
+| `influencer-list.md` exists and has ≥15 profiles with LinkedIn URLs | [ ] |
 | `learning-log.md` exists | [ ] |
+| `weekly-intel/` folder exists (auto-created on first run) | [ ] |
 
 ### API Dependencies
 
 | Check | Status |
 |-------|--------|
-| Apify API key valid (test with simple actor run) | [ ] |
+| Apify API key valid (test with simple actor run — `harvestapi/linkedin-profile-posts`) | [ ] |
+| Apify actor `A3cAPGpwBEG8RJwse` reachable for weekly-influencer-analysis | [ ] |
 | Reddit API access working | [ ] |
 | Fireflies API access working (if using transcripts) | [ ] |
 | Gemini API key valid (if using for images/YouTube) | [ ] |
@@ -57,7 +60,8 @@ Before any production round, test every live dependency the engine uses. Pass/fa
 |-------|--------|
 | All required env vars set | [ ] |
 | Client folder path resolves correctly | [ ] |
-| Influencer list exists (for research worker 1) | [ ] |
+| Influencer list last refreshed <90 days ago (quarterly refresh) | [ ] |
+| `APIFY_TOKEN` env var set | [ ] |
 | Previous session's learning log is up to date | [ ] |
 
 ---

@@ -39,7 +39,9 @@ clients/{{client_name}}/content/
 ├── content-pillars.md        ✅ required
 ├── cta-templates.md          ✅ required
 ├── brand-guidelines.md       ✅ required
+├── influencer-list.md        ✅ required for weekly-influencer-analysis (15-25 curated names)
 ├── learning-log.md           ✅ auto-generated
+├── weekly-intel/             ✅ auto-generated (one brief per week)
 └── transcripts/              optional (Fireflies dumps)
 ```
 
@@ -52,10 +54,12 @@ If foundation docs don't exist, run **Step 1: Foundation** first. Don't skip thi
 ## The Pipeline
 
 ```
-Step 1        Step 2          Step 3         Step 4          Step 5         Step 6          Step 7
-Foundation → Research → Ideation → Hooks → Copy → Grade+Refine → Deliver
-(once)       (weekly)    (weekly)   (per idea)  (per idea)  (per draft)     (per batch)
+Step 1        Step 2a              Step 2b       Step 3       Step 4    Step 5    Step 6           Step 7
+Foundation → Influencer Analysis → Research → Ideation → Hooks → Copy → Grade+Refine → Deliver
+(once)       (weekly)               (weekly)    (weekly)    (per idea) (per idea) (per draft)    (per batch)
 ```
+
+**Step 2a runs before 2b every week.** The influencer analysis is engagement-ranked, classified, and trend-aware — it shapes what the broader research workers prioritize.
 
 ### Step 1: Foundation (built once per person)
 
@@ -72,20 +76,46 @@ Outputs:
 
 **Many people skip this and go straight to writing. Then wonder why everything sounds the same.**
 
-### Step 2: Research (runs weekly)
+### Step 2a: Weekly Influencer Analysis (runs weekly, first)
+
+**Skill:** `./skills/weekly-influencer-analysis`
+
+Deep, engagement-ranked analysis of the client's curated top influencers — the single highest-signal weekly input.
+
+**Requires:** `clients/{{client}}/content/influencer-list.md` (15-25 client-supplied LinkedIn profiles, tiered 1-3).
+
+**What it does:**
+- Scrapes last 7 days of posts across all influencers in one batched Apify run (actor: `harvestapi/linkedin-profile-posts`)
+- Scores every post: weighted Engagement Score `(likes + 3×comments + 5×shares)` + author-normalized Z-score
+- Flags outliers (Z ≥ 2.0 = posts 2x+ above author's own median)
+- Classifies every hook against the 50-template library (`04-hook-generator.md`) and the 5 creator-benchmark patterns (hidden truth, "[X] of [Y]," number-led, cliffhanger, contrarian)
+- Clusters topics using the client's `content-pillars.md` taxonomy
+- Tracks format mix (carousel vs image vs video vs text) and length distribution week-over-week
+- Flags gaps — pillars no influencer covered this week, or topics everyone took from the same angle
+
+**Output:** `clients/{{client}}/content/weekly-intel/{{YYYY-MM-DD}}.md` — a Weekly Intel Brief with:
+- Top 10 posts of the week
+- Hook patterns performing (vs creator-benchmark baseline)
+- Topics gaining traction + angle spread
+- Format + length trends
+- Outliers with hypotheses
+- Gaps the client could own
+- 3-5 concrete recommendations that feed directly into ideation
+
+**Every 4 weeks:** a Trend Memory summary that surfaces patterns holding, fading, or emerging across the last 4 briefs.
+
+### Step 2b: Research Workers (runs weekly, after 2a)
 
 **Skill:** `./skills/02-research-workers`
 
-Six parallel research workers:
+Six parallel research workers cover the broader signal surface:
 
-1. **Apify + LinkedIn scraping** — what's performing in your niche right now
+1. **Apify + LinkedIn scraping** — broad un-curated trend scan in the niche (complements 2a)
 2. **Reddit mining** — real audience pain language from niche communities
 3. **YouTube mining (Gemini)** — frameworks from long-form video worth adapting
 4. **X/Twitter signal** — live debates and hot takes this week
 5. **Fireflies transcripts** — client call recordings turned into content gold (highest-signal source)
 6. **Repurposing archive** — your own post history, what worked, what didn't
-
-Plus: **Weekly influencer scan** — track relevant industry influencers on LinkedIn, analyze their recent posts, extract performing hooks/angles/topics.
 
 All results merged, deduplicated, quality gated.
 

@@ -10,11 +10,11 @@ This is a **Claude Code skill system** — a chained set of prompts, templates, 
 
 ## What this is
 
-A 7-step LinkedIn content pipeline, plus maintenance and repurposing:
+A LinkedIn content pipeline, plus weekly industry analysis, maintenance, and repurposing:
 
 ```
-Foundation → Research → Ideation → Hooks → Copy → Grade → Deliver
-   (once)     (weekly)    (weekly)  (per idea) (per idea) (per draft) (per batch)
+Foundation → Weekly Influencer Analysis → Research → Ideation → Hooks → Copy → Grade → Deliver
+   (once)     (weekly, first)               (weekly)    (weekly)   (per idea) (per idea) (per draft) (per batch)
 ```
 
 Each step is a separate Claude Code skill. The orchestrator (`SKILL.md` at root) chains them together. Each client lives in `clients/{{client_name}}/content/` with their own voice profile, ICP, pillars, CTAs, and learning log.
@@ -22,11 +22,12 @@ Each step is a separate Claude Code skill. The orchestrator (`SKILL.md` at root)
 Opinionated, not generic:
 
 - **Voice-first.** Nothing ships until a 25-question voice interview is done. Without a voice profile, output sounds like AI.
-- **Research before ideation.** Six parallel workers (LinkedIn scraping, Reddit mining, YouTube, X, call transcripts, repurposing archive) gather signal before a single idea is generated.
+- **Weekly industry analysis, driven by the client's own influencer list.** The client inserts 15-25 top influencers in their niche. Every week, Apify scrapes the last 7 days of posts across that curated list, ranks them by weighted engagement, flags author-normalized outliers, classifies hooks against the 50-template library and the creator benchmark, and outputs a ranked Weekly Intel Brief. The brief feeds ideation.
+- **Research before ideation.** Six parallel workers (LinkedIn trend scraping, Reddit mining, YouTube, X, call transcripts, repurposing archive) complement the influencer analysis before a single idea is generated.
 - **Hook + Copy are separate steps.** Hooks are generated from a 50-template library grouped by emotional trigger (desire / curiosity / fear), informed by a 366-post creator benchmark. Copy development happens against the approved hook.
 - **Every draft is graded on 5 dimensions.** Below 38/50 gets auto-rewritten with dimension-specific fixes. Max 2 rewrite loops.
 - **Repurpose is restructuring, not reformatting.** One validated LinkedIn post becomes 5 platform-native pieces — X thread, newsletter, SEO blog, short-form video script, carousel.
-- **Learning log per client.** Every correction is captured. Patterns across 5+ sessions promote into permanent skill rules.
+- **Learning log per client.** Every correction is captured. Patterns across 5+ sessions promote into permanent skill rules. Every 4 weeks, a Trend Memory summary surfaces patterns holding, fading, or emerging across the influencer analyses.
 
 ---
 
@@ -38,8 +39,9 @@ Opinionated, not generic:
 ├── creator-benchmark.md                  # 366-post LinkedIn analysis (7 GTM creators)
 ├── skills/
 │   ├── 01-voice-profile.md               # 25-question voice interview → voice profile + ICP + pillars + CTAs + brand
-│   ├── 02-research-workers.md            # 6 parallel research workers + weekly influencer scan
-│   ├── 03-weekly-ideation.md             # Ranked idea batch from research output
+│   ├── weekly-influencer-analysis.md     # Weekly Apify scrape of client-supplied influencers → engagement-ranked brief
+│   ├── 02-research-workers.md            # 6 parallel research workers (broad signal surface)
+│   ├── 03-weekly-ideation.md             # Ranked idea batch from research + influencer brief
 │   ├── 04-hook-generator.md              # 50 hook templates × emotional triggers × creator benchmark
 │   ├── 05-copy-developer.md              # Approved hook + voice profile → full draft
 │   ├── 06-post-grader.md                 # 5-dimension rubric, /50, auto-rewrite on fail
@@ -57,6 +59,7 @@ Opinionated, not generic:
 │       ├── content-pillars.md
 │       ├── cta-templates.md
 │       ├── brand-guidelines.md
+│       ├── influencer-list.md            # Client-supplied list: 15-25 LinkedIn profiles, tiered 1-3
 │       ├── learning-log.md
 │       └── transcripts/
 ├── knowledge_base/
@@ -113,7 +116,7 @@ The pipeline references external services. You don't need all of them — missin
 | Tool | Used for | Required? |
 |---|---|---|
 | Claude Code | Running the skills | **Yes** |
-| Apify (harvestapi/linkedin-profile-posts) | LinkedIn scraping (Worker 1, Influencer Scan) | Strongly recommended |
+| Apify (harvestapi/linkedin-profile-posts) | Weekly Influencer Analysis + Worker 1 broad scan | **Required** for the weekly analysis skill |
 | Reddit API | Audience pain mining (Worker 2) | Optional |
 | Gemini API | YouTube long-form mining (Worker 3) | Optional |
 | X / Twitter API | Live debate signal (Worker 4) | Optional |

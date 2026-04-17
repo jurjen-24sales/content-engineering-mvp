@@ -67,11 +67,8 @@ Angle: {{what makes this post work}}
 Steal-worthy: {{specific element to adapt — hook pattern, structure, topic angle}}
 ```
 
-**Weekly influencer scan addition:**
-- Maintain a list of 15-25 industry influencers per client
-- Track their posting patterns, topic shifts, engagement trends
-- Flag: new topics gaining traction, formats outperforming, hooks worth adapting
-- Output: "Influencer Intel Brief" — what the top voices in your niche talked about this week
+**Weekly influencer scan — moved to its own skill:**
+The deep, engagement-ranked analysis of client-supplied top influencers is now a dedicated skill: `./skills/weekly-influencer-analysis.md`. Run that every week before ideation. This worker's job here is only the broad, un-curated LinkedIn trend scrape.
 
 ### Worker 2: Reddit Mining
 
@@ -223,33 +220,17 @@ Deliver ranked research findings to the weekly ideation session as input.
 
 ## Influencer Scan Protocol
 
-**Frequency:** Weekly (runs as part of Worker 1 but gets its own output section)
+**See the dedicated skill:** `./skills/weekly-influencer-analysis.md`
 
-**Setup per client:**
-1. Identify 15-25 influencers in their industry/niche
-2. Categorize: Tier 1 (direct competitors), Tier 2 (adjacent voices), Tier 3 (aspirational)
-3. Store list in `clients/{{client}}/content/influencer-list.md`
+That skill replaces what used to be a sub-section here. It:
+- Reads `clients/{{client}}/content/influencer-list.md` (client-supplied top influencers)
+- Scrapes their last 7 days of posts via Apify in one batched run
+- Ranks posts by weighted Engagement Score (likes + 3×comments + 5×shares)
+- Flags author-normalized outliers (Z ≥ 2.0)
+- Classifies hooks against the 50-template library and the 5 creator-benchmark patterns
+- Outputs a Weekly Intel Brief with hooks / topics / formats / gaps / recommendations
 
-**Weekly scan outputs:**
-```
-INFLUENCER INTEL BRIEF — Week of {{date}}
-
-Trending topics this week:
-1. {{topic}} — covered by {{n}} influencers, avg engagement {{n}}
-2. {{topic}} — breakout post by {{name}}, {{engagement}}
-
-Hook patterns performing:
-- {{pattern}} (used by {{names}}, avg {{engagement}})
-
-New angles spotted:
-- {{influencer}} posted about {{topic}} from {{unusual angle}}
-
-Format trends:
-- {{carousel/image/text-only}} outperforming this week
-
-Gaps (nobody is talking about):
-- {{topic your client could own}}
-```
+Run it weekly, same day every week. Consistency is what makes the trend signal meaningful.
 
 ---
 
