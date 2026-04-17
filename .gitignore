@@ -1,0 +1,31 @@
+# Client data — this repo ships the engine, not anyone's content
+clients/
+
+# Transcripts, raw research, personal data
+transcripts/
+*.transcript
+*.fireflies
+research-runs/
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+apify-auth.json
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*~
+Thumbs.db
+
+# Build / cache
+node_modules/
+__pycache__/
+*.pyc
+.cache/
+.pytest_cache/
